@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#091321">
+<title>ГОРОД ONLINE — Воронеж</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{color-scheme:dark;--bg:#08111d;--panel:#111e2e;--line:#26384e;--muted:#9eafc4;--text:#edf5ff;--blue:#68b5ff;--green:#70c79a;--amber:#f2bd68}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% -15%,#1b3b5b 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{position:sticky;top:0;z-index:1000;background:#091523ed;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.wrap{width:min(1200px,calc(100% - 28px));margin:auto}.top{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{font-size:21px;font-weight:900;letter-spacing:.09em}.brand span{color:var(--blue)}.city{color:var(--muted);font-size:13px}
+main{padding:26px 0 54px}.intro{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}.eyebrow{color:var(--blue);font-size:11px;letter-spacing:.15em;font-weight:800}h1{font-size:clamp(28px,5vw,42px);line-height:1.1;margin:7px 0}.sub{color:var(--muted);max-width:680px;margin:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:16px;align-items:start}.panel{background:linear-gradient(145deg,#142337,#101b2a);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0}.map-panel{padding:10px}.map-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 5px 12px}.map-head strong{font-size:16px}#map{height:min(68vh,680px);min-height:390px;border-radius:11px;overflow:hidden;background:#0b1828}.side{display:grid;gap:13px}.panel h2{font-size:16px;margin:0 0 10px}.muted{color:var(--muted)}.weather-temp{font-size:39px;font-weight:800;line-height:1.2}.weather-row{display:flex;justify-content:space-between;gap:10px;margin-top:9px;color:#c5d4e6;font-size:13px}.status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:7px;margin-top:10px}.dot{width:8px;height:8px;border-radius:50%;background:#8294aa;display:inline-block}.dot.ok{background:var(--green)}.dot.warn{background:var(--amber)}
+button,a.btn{font:inherit;cursor:pointer;border:1px solid #36506e;border-radius:10px;padding:10px 12px;background:#1b3049;color:#eaf4ff;text-decoration:none;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:7px}button:hover,a.btn:hover{background:#244365}button.primary,a.primary{background:#176eb8;border-color:#267fc9}.controls{display:flex;gap:8px;flex-wrap:wrap;padding:0 5px 9px}.toggle{display:flex;align-items:center;gap:7px;font-size:13px;color:#d7e4f4;background:#0c1929;border:1px solid var(--line);padding:8px 10px;border-radius:9px}.toggle input{accent-color:#68b5ff}.search{display:flex;gap:7px}.search input{min-width:0;flex:1;background:#0a1727;border:1px solid #334860;color:var(--text);border-radius:10px;padding:10px;font:inherit}.list{display:grid;gap:8px;max-height:260px;overflow:auto}.item{padding:10px;border:1px solid var(--line);border-radius:10px;background:#0c1929}.item strong{display:block;font-size:13px}.item small{color:var(--muted)}.disclaimer{margin-top:15px;padding:12px;border:1px solid #715a32;background:#2a241a;color:#f4dfb8;border-radius:12px;font-size:12px}.source{font-size:13px;color:var(--muted);margin-top:8px}.source a{color:var(--blue)}footer{border-top:1px solid var(--line);padding:20px 0;color:#8193aa;font-size:12px;margin-top:30px}
+.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#142438;color:#edf5ff}.leaflet-popup-content a{color:#78bdff}.leaflet-control-attribution{font-size:10px!important}
+@media(max-width:850px){.grid{grid-template-columns:1fr}.side{grid-template-columns:repeat(2,minmax(0,1fr))}.intro{display:block}.city{margin-top:7px}}
+@media(max-width:560px){.side{grid-template-columns:1fr}.wrap{width:min(100% - 20px,1200px)}#map{height:56vh;min-height:350px}.top{min-height:60px}.brand{font-size:18px}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><div class="brand">ГОРОД <span>ONLINE</span></div><div class="city">Воронеж · городской справочник</div></div></header>
+<main class="wrap">
+<section class="intro"><div><div class="eyebrow">ГОРОДСКАЯ КАРТА</div><h1>Воронеж на одной карте</h1><p class="sub">Остановки, городские места и текущая погода. Информация загружается из открытых источников; время обновления указано рядом с каждым блоком.</p></div></section>
+<div class="grid">
+<section class="panel map-panel">
+ <div class="map-head"><strong>Интерактивная карта</strong><span class="muted" id="mapStatus">Подготовка карты…</span></div>
+ <div class="controls">
+  <label class="toggle"><input type="checkbox" id="stopsToggle" checked> Остановки</label>
+  <label class="toggle"><input type="checkbox" id="placesToggle" checked> Городские места</label>
+  <button id="reloadMap" type="button">↻ Обновить объекты</button>
+ </div>
+ <div id="map" role="application" aria-label="Интерактивная карта Воронежа"></div>
+ <div class="disclaimer"><strong>Важно о транспорте:</strong> точки остановок на этой карте — справочные данные OpenStreetMap, а не GPS-координаты движущихся автобусов. Для просмотра движения транспорта в реальном времени открой официальный сервис городского оператора.</div>
+</section>
+<aside class="side">
+ <section class="panel">
+  <h2>Погода сейчас</h2><div id="weatherTemp" class="weather-temp">—°</div><div id="weatherDesc" class="muted">Загрузка погоды…</div>
+  <div class="weather-row"><span>Ощущается как</span><strong id="feels">—</strong></div>
+  <div class="weather-row"><span>Ветер</span><strong id="wind">—</strong></div>
+  <div class="weather-row"><span>Осадки</span><strong id="rain">—</strong></div>
+  <div class="status"><i class="dot" id="weatherDot"></i><span id="weatherUpdated">Ожидание данных</span></div>
+ </section>
+ <section class="panel">
+  <h2>Транспорт онлайн</h2>
+  <p class="muted" style="font-size:13px">Городской оператор сообщает, что на его сайте можно смотреть движение общественного транспорта в режиме реального времени.</p>
+  <a class="btn primary" href="https://eogpp-vrn.ru/" target="_blank" rel="noopener">Открыть карту транспорта ↗</a>
+  <div class="source">Источник: <a href="https://eogpp-vrn.ru/" target="_blank" rel="noopener">МБУ «ЕОГПП»</a>. Текущие GPS-метки не встроены в эту карту.</div>
+ </section>
+ <section class="panel">
+  <h2>Поиск на карте</h2>
+  <div class="search"><input id="searchInput" type="search" placeholder="Например, парк или остановка"><button id="searchBtn" type="button">Найти</button></div>
+  <p class="source" id="searchStatus">Поиск среди загруженных объектов.</p>
+  <div class="list" id="results"></div>
+ </section>
+ <section class="panel">
+  <h2>Источники данных</h2>
+  <div class="item"><strong>OpenStreetMap</strong><small>Карта, остановки и городские объекты.</small></div>
+  <div class="item"><strong>Open-Meteo</strong><small>Текущие погодные условия.</small></div>
+  <div class="status"><i class="dot" id="osmDot"></i><span id="osmUpdated">Объекты ещё не загружены</span></div>
+  <div class="status"><i class="dot ok"></i><span id="weatherSource">Погода обновляется автоматически</span></div>
+ </section>
+</aside>
+</div>
+</main>
+<footer><div class="wrap">ГОРОД ONLINE · Воронеж. Независимый информационный проект, не связанный с администрацией города или перевозчиками. Данные могут быть неполными или запаздывать. © OpenStreetMap contributors.</div></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const CENTER=[51.6608,39.2003], BBOX='51.55,39.10,51.76,39.34';
+const map=L.map('map',{scrollWheelZoom:true}).setView(CENTER,13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(map);
+const stopLayer=L.layerGroup().addTo(map),placeLayer=L.layerGroup().addTo(map);let allItems=[];
+const $=id=>document.getElementById(id);
+function markerIcon(color){return L.divIcon({className:'',html:'<span style="display:block;width:12px;height:12px;border-radius:50%;background:'+color+';border:2px solid #fff;box-shadow:0 1px 6px #0009"></span>',iconSize:[12,12],iconAnchor:[6,6]})}
+function safeText(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function getName(tags){return tags.name||tags['name:ru']||tags.ref||tags.amenity||tags.highway||'Объект на карте'}
+function addFeature(el,kind){const tags=el.tags||{},lat=el.lat??el.center?.lat,lon=el.lon??el.center?.lon;if(!Number.isFinite(lat)||!Number.isFinite(lon))return;const name=getName(tags),isStop=kind==='stop',marker=L.marker([lat,lon],{icon:markerIcon(isStop?'#68b5ff':'#72c99c')});const desc=isStop?'Остановка общественного транспорта':'Городской объект';marker.bindPopup('<strong>'+safeText(name)+'</strong><br>'+desc+'<br><small>Данные OpenStreetMap · не в реальном времени</small>');(isStop?stopLayer:placeLayer).addLayer(marker);allItems.push({name,kind,lat,lon,marker,desc})}
+async function loadMapObjects(){ $('mapStatus').textContent='Загружаем объекты…';$('osmUpdated').textContent='Загрузка из OpenStreetMap…';$('osmDot').className='dot';allItems=[];stopLayer.clearLayers();placeLayer.clearLayers();
+const query='[out:json][timeout:25];(node["highway"="bus_stop"]('+BBOX+');node["public_transport"="platform"]('+BBOX+');node["amenity"="bus_station"]('+BBOX+');way["amenity"~"^(hospital|pharmacy|school|library)$"]('+BBOX+');node["amenity"~"^(hospital|pharmacy|school|library)$"]('+BBOX+');way["leisure"="park"]('+BBOX+');node["leisure"="park"]('+BBOX+'););out center tags;';
+const servers=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];let data=null;
+for(const url of servers){try{const r=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:query});if(!r.ok)throw Error('HTTP '+r.status);data=await r.json();break}catch(e){}}
+if(!data){$('mapStatus').textContent='Источник временно недоступен';$('osmUpdated').textContent='Не удалось загрузить объекты. Попробуйте позже.';$('osmDot').className='dot warn';return}
+data.elements.forEach(el=>{const t=el.tags||{};const stop=t.highway==='bus_stop'||t.public_transport==='platform'||t.amenity==='bus_station';addFeature(el,stop?'stop':'place')});
+$('stopsToggle').checked=true;$('placesToggle').checked=true;$('mapStatus').textContent='Объектов загружено: '+allItems.length;$('osmUpdated').textContent='Обновлено: '+new Date().toLocaleTimeString('ru-RU');$('osmDot').className='dot ok';renderResults();
+}
+function renderResults(filter=''){const box=$('results');box.replaceChildren();const found=allItems.filter(x=>x.name.toLowerCase().includes(filter.toLowerCase())).slice(0,30);found.forEach(x=>{const d=document.createElement('button');d.type='button';d.className='item';d.style.textAlign='left';d.style.width='100%';d.innerHTML='<strong>'+safeText(x.name)+'</strong><small>'+x.desc+'</small>';d.addEventListener('click',()=>{map.setView([x.lat,x.lon],17);x.marker.openPopup()});box.append(d)});if(!found.length){const p=document.createElement('p');p.className='source';p.textContent=filter?'Ничего не найдено среди загруженных объектов.':'Объекты появятся после загрузки карты.';box.append(p)}}
+$('searchBtn').addEventListener('click',()=>{const q=$('searchInput').value.trim();renderResults(q);$('searchStatus').textContent=q?'Результаты поиска: '+q:'Показаны доступные объекты.'});
+$('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')$('searchBtn').click()});
+$('stopsToggle').addEventListener('change',e=>{if(e.target.checked)map.addLayer(stopLayer);else map.removeLayer(stopLayer)});
+$('placesToggle').addEventListener('change',e=>{if(e.target.checked)map.addLayer(placeLayer);else map.removeLayer(placeLayer)});
+$('reloadMap').addEventListener('click',loadMapObjects);
+const weatherCodes={0:'Ясно',1:'Преимущественно ясно',2:'Переменная облачность',3:'Пасмурно',45:'Туман',48:'Изморозевый туман',51:'Слабая морось',53:'Морось',55:'Сильная морось',61:'Небольшой дождь',63:'Дождь',65:'Сильный дождь',71:'Небольшой снег',73:'Снег',75:'Сильный снег',80:'Ливень',81:'Сильный ливень',82:'Очень сильный ливень',95:'Гроза'};
+async function loadWeather(){try{const url='https://api.open-meteo.com/v1/forecast?latitude=51.6608&longitude=39.2003&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m&timezone=Europe%2FMoscow';const r=await fetch(url);if(!r.ok)throw Error();const d=await r.json(),c=d.current;$('weatherTemp').textContent=Math.round(c.temperature_2m)+'°';$('weatherDesc').textContent=weatherCodes[c.weather_code]||'Погодные условия';$('feels').textContent=Math.round(c.apparent_temperature)+'°';$('wind').textContent=Math.round(c.wind_speed_10m)+' км/ч';$('rain').textContent=c.precipitation+' мм';$('weatherUpdated').textContent='Обновлено: '+new Date(c.time).toLocaleString('ru-RU');$('weatherDot').className='dot ok'}catch(e){$('weatherDesc').textContent='Не удалось получить прогноз';$('weatherUpdated').textContent='Источник временно недоступен';$('weatherDot').className='dot warn'}}
+loadMapObjects();loadWeather();setInterval(loadWeather,10*60*1000);
+</script>
+</body>
+</html>
