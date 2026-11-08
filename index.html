@@ -26,7 +26,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 #formMessage{margin-top:12px;padding:12px;border-radius:10px;background:#17263a;color:#c8d9ed;display:none}
 footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-size:12px}
 @media(max-width:720px){.grid,.formgrid{grid-template-columns:1fr}.top small{max-width:145px;text-align:right}.card{padding:17px}}
-.map-wrap{height:430px;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#0b1626;position:relative}
+.map-wrap{height:520px;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#0b1626;position:relative}
 #russiaMap{height:100%;width:100%;min-height:320px}
 .map-note{display:flex;gap:9px;align-items:flex-start;margin-top:12px;padding:12px;border:1px solid #71552e;background:#2b2419;border-radius:11px;color:#ffe0a7;font-size:13px}
 .map-legend{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;color:var(--muted);font-size:12px}
@@ -48,7 +48,7 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 <div class="map-wrap"><div id="russiaMap" role="img" aria-label="Обзорная карта территории России"></div></div>
 <div class="map-legend"><span>● Карта-ориентир</span><span>● Статусы регионов: нет данных</span></div>
 <div class="map-note"><strong>Важно:</strong><span>Карта не показывает наличие или отсутствие угроз. Здесь пока нет проверенного автоматического источника официальных предупреждений. Проверяйте сообщения региональных властей и МЧС.</span></div>
-<p class="small">Подложка карты: OpenStreetMap. © OpenStreetMap contributors.</p>
+<p class="small" id="mapLoadNote">Загружаются границы регионов…</p><p class="small">Подложка: OpenStreetMap. Границы регионов: открытые геоданные OpenStreetMap. Контуры приведены для справочной ориентации.</p>
 </section>
 <div class="grid">
 <section class="card">
@@ -150,26 +150,29 @@ refreshRegionalStatus();
 setInterval(refreshRegionalStatus,60000);
 const mapNode=document.getElementById('russiaMap');
 if(mapNode && window.L){
- const map=L.map('russiaMap',{scrollWheelZoom:false}).setView([61,100],3);
+ const map=L.map('russiaMap',{scrollWheelZoom:false}).setView([62,95],3);
  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
   maxZoom:8,
   attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
  }).addTo(map);
- setTimeout(()=>map.invalidateSize(),150);
-}
-document.getElementById('sourceForm').addEventListener('submit',function(e){
- e.preventDefault();
- const city=document.getElementById('city').value.trim();
- const url=document.getElementById('sourceUrl').value.trim();
- let parsed;
- try{parsed=new URL(url)}catch(_){parsed=null}
- const box=document.getElementById('formMessage');
- if(!parsed || parsed.protocol!=='https:'){
-  box.style.display='block';box.textContent='Укажи корректную ссылку, начинающуюся с https://';return;
- }
- box.style.display='block';
- box.textContent='Предложение для '+city+' проверено в демо-режиме. Отправка и публикация пока отключены — сайт не сохраняет эти данные.';
-});
-</script>
+ fetch('https://raw.githubusercontent.com/rnekrasov-msk/geojson/master/regions.geojson')
+  .then(r=>{if(!r.ok)throw new Error('map boundaries unavailable');return r.json()})
+  .then(geo=>{
+   const layer=L.geoJSON(geo,{
+    style:()=>({color:'#8da5c2',weight:1,opacity:.8,fillColor:'#52647b',fillOpacity:.16}),
+    onEachFeature:(feature,shape)=>{
+     const p=feature.properties||{};
+     const name=p.name||p.NAME_1||p.NAME||p.region||p.title||'Регион России';
+     shape.bindPopup('<strong>'+String(name).replace(/[<>&"]/g,'')+'</strong><br>Статус официальных предупреждений здесь пока не подключён.<br>Отсутствие данных не означает безопасность.');
+    }
+   }).addTo(map);
+   if(layer.getBounds().isValid())map.fitBounds(layer.getBounds(),{padding:[12,12]});
+   document.getElementById('mapLoadNote').textContent='Границы регионов загружены. Официальные статусы пока не подключены.';
+  })
+  .catch(()=>{
+   document.getElementById('mapLoadNote').textContent='Не удалось загрузить границы регионов. Карта-основа остаётся доступной.';
+  });
+ setTimeout(()=>map.invalidateSize(),200);
+}</script>
 </body>
 </html>
