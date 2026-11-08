@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a1220">
+<title>РАДАР — официальные предупреждения</title>
+<style>
+:root{color-scheme:dark;--bg:#09111e;--panel:#111d2d;--line:#26364c;--muted:#9aabc1;--text:#edf4ff;--blue:#73b7ff;--amber:#f3bd62}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% -10%,#1b3553 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{border-bottom:1px solid var(--line);background:#0b1524dd;position:sticky;top:0;backdrop-filter:blur(12px);z-index:2}
+.wrap{width:min(1050px,calc(100% - 32px));margin:auto}.top{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{font-size:24px;font-weight:900;letter-spacing:.16em}.brand b{color:#ff6d75}.top small{color:var(--muted)}
+main{padding:34px 0 60px}.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+h1{font-size:clamp(29px,5vw,45px);line-height:1.08;margin:10px 0 12px}.lead{max-width:700px;color:var(--muted);font-size:16px}
+.notice{margin:24px 0;padding:17px 18px;border:1px solid #71552e;background:#2b2419;border-radius:14px;color:#ffe0a7}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:18px}.card{background:linear-gradient(145deg,#142238,#101a29);border:1px solid var(--line);border-radius:17px;padding:21px;min-width:0}
+h2{font-size:18px;margin:0 0 12px}.muted{color:var(--muted)}.pill{display:inline-flex;padding:5px 9px;border:1px solid #52657d;border-radius:99px;color:#dce8f7;font-size:12px}
+.state{display:flex;align-items:center;gap:10px;margin:14px 0 8px}.dot{width:10px;height:10px;border-radius:50%;background:#91a0b3;box-shadow:0 0 0 4px #91a0b31c}
+ul{padding-left:19px;color:var(--muted)}li{margin:8px 0}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.links{display:grid;gap:12px}.link{padding:14px;border:1px solid var(--line);border-radius:12px;background:#0d1828}.link strong{display:block;margin-bottom:3px}
+footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-size:12px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.top small{max-width:130px;text-align:right}.card{padding:17px}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><div class="brand">РА<span><b>Д</b></span>АР</div><small>Информационный проект · неофициальный ресурс</small></div></header>
+<main class="wrap">
+<div class="eyebrow">Гражданская информация</div>
+<h1>Официальные предупреждения<br>и полезные источники</h1>
+<p class="lead">Справочная страница для поиска официальных сообщений и рекомендаций для населения. Проверяйте первоисточник и время публикации.</p>
+<div class="notice"><strong>Важно:</strong> это стартовая версия сайта. Автоматическая проверка источников не подключена, поэтому здесь нет сведений о текущей обстановке. Не используйте эту страницу как систему экстренного оповещения.</div>
+<div class="grid">
+<section class="card">
+<h2>Текущий статус сайта</h2>
+<span class="pill">РЕЖИМ: СПРАВОЧНЫЙ</span>
+<div class="state"><span class="dot"></span><strong>Официальные сообщения не загружаются автоматически</strong></div>
+<p class="muted">На этой версии проекта не отображаются статусы регионов и оперативная обстановка. Для актуальной информации откройте официальные каналы своего региона.</p>
+</section>
+<section class="card">
+<h2>Как действовать</h2>
+<ul>
+<li>Следуйте сообщениям региональных властей и экстренных служб.</li>
+<li>При угрозе выполняйте инструкции официальных оповещений.</li>
+<li>Не распространяйте непроверенные сообщения и старые скриншоты.</li>
+<li>При непосредственной опасности обращайтесь в экстренные службы.</li>
+</ul>
+</section>
+</div>
+<section class="card" style="margin-top:16px">
+<h2>Официальные источники</h2>
+<div class="links">
+<div class="link"><strong>МЧС России</strong><span class="muted">Официальные новости, рекомендации и сообщения ведомства.</span><br><a href="https://mchs.gov.ru/" target="_blank" rel="noopener">Открыть сайт МЧС →</a></div>
+<div class="link"><strong>Единый портал Госуслуг</strong><span class="muted">Государственные сервисы и справочная информация.</span><br><a href="https://www.gosuslugi.ru/" target="_blank" rel="noopener">Открыть Госуслуги →</a></div>
+</div>
+<p class="muted" style="margin:15px 0 0">Ищите также официальные сайты и проверенные каналы администрации вашего региона.</p>
+</section>
+</main>
+<footer><div class="wrap">РАДАР — независимый справочный проект. Не связан с МЧС России или другими государственными органами. Дата сборки: 8 ноября 2026.</div></footer>
+</body></html>
