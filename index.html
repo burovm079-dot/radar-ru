@@ -6,21 +6,26 @@
 <meta name="theme-color" content="#0a1220">
 <title>РАДАР — официальные предупреждения</title>
 <style>
-:root{color-scheme:dark;--bg:#09111e;--panel:#111d2d;--line:#26364c;--muted:#9aabc1;--text:#edf4ff;--blue:#73b7ff;--amber:#f3bd62}
+:root{color-scheme:dark;--bg:#09111e;--panel:#111d2d;--line:#26364c;--muted:#9aabc1;--text:#edf4ff;--blue:#73b7ff;--amber:#f3bd62;--red:#ff777e}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% -10%,#1b3553 0,transparent 42%),var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-header{border-bottom:1px solid var(--line);background:#0b1524dd;position:sticky;top:0;backdrop-filter:blur(12px);z-index:2}
+header{border-bottom:1px solid var(--line);background:#0b1524ed;position:sticky;top:0;backdrop-filter:blur(12px);z-index:2}
 .wrap{width:min(1050px,calc(100% - 32px));margin:auto}.top{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:15px}
 .brand{font-size:24px;font-weight:900;letter-spacing:.16em}.brand b{color:#ff6d75}.top small{color:var(--muted)}
 main{padding:34px 0 60px}.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
 h1{font-size:clamp(29px,5vw,45px);line-height:1.08;margin:10px 0 12px}.lead{max-width:700px;color:var(--muted);font-size:16px}
 .notice{margin:24px 0;padding:17px 18px;border:1px solid #71552e;background:#2b2419;border-radius:14px;color:#ffe0a7}
-.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:18px}.card{background:linear-gradient(145deg,#142238,#101a29);border:1px solid var(--line);border-radius:17px;padding:21px;min-width:0}
+.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-top:18px}.card{background:linear-gradient(145deg,#142238,#101a29);border:1px solid var(--line);border-radius:17px;padding:21px;min-width:0;margin-top:16px}
 h2{font-size:18px;margin:0 0 12px}.muted{color:var(--muted)}.pill{display:inline-flex;padding:5px 9px;border:1px solid #52657d;border-radius:99px;color:#dce8f7;font-size:12px}
 .state{display:flex;align-items:center;gap:10px;margin:14px 0 8px}.dot{width:10px;height:10px;border-radius:50%;background:#91a0b3;box-shadow:0 0 0 4px #91a0b31c}
 ul{padding-left:19px;color:var(--muted)}li{margin:8px 0}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
 .links{display:grid;gap:12px}.link{padding:14px;border:1px solid var(--line);border-radius:12px;background:#0d1828}.link strong{display:block;margin-bottom:3px}
+button{font:inherit;cursor:pointer;border:0;border-radius:11px;padding:12px 16px;background:#2777c8;color:white;font-weight:700}button.secondary{background:#1c2b40;border:1px solid #3b506b;color:#e8f2ff}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.field{display:grid;gap:6px}.field label{font-size:13px;color:#c5d2e2}.field input,.field select{width:100%;background:#0b1626;border:1px solid #34465e;border-radius:10px;padding:12px;color:var(--text);font:inherit}
+.small{font-size:12px;color:var(--muted);line-height:1.55}.law{border-top:1px solid var(--line);padding:14px 0}.law summary{cursor:pointer;font-weight:700}.law p{color:#b8c6d8;font-size:14px}.law a{display:inline-block;margin-top:4px}
+#formMessage{margin-top:12px;padding:12px;border-radius:10px;background:#17263a;color:#c8d9ed;display:none}
 footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-size:12px}
-@media(max-width:720px){.grid{grid-template-columns:1fr}.top small{max-width:130px;text-align:right}.card{padding:17px}}
+@media(max-width:720px){.grid,.formgrid{grid-template-columns:1fr}.top small{max-width:145px;text-align:right}.card{padding:17px}}
 </style>
 </head>
 <body>
@@ -29,13 +34,13 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 <div class="eyebrow">Гражданская информация</div>
 <h1>Официальные предупреждения<br>и полезные источники</h1>
 <p class="lead">Справочная страница для поиска официальных сообщений и рекомендаций для населения. Проверяйте первоисточник и время публикации.</p>
-<div class="notice"><strong>Важно:</strong> это стартовая версия сайта. Автоматическая проверка источников не подключена, поэтому здесь нет сведений о текущей обстановке. Не используйте эту страницу как систему экстренного оповещения.</div>
+<div class="notice"><strong>Важно:</strong> эта страница не является системой экстренного оповещения. Отсутствие сообщения здесь не означает отсутствие опасности. Следуйте официальным инструкциям региональных властей и экстренных служб.</div>
 <div class="grid">
 <section class="card">
 <h2>Текущий статус сайта</h2>
 <span class="pill">РЕЖИМ: СПРАВОЧНЫЙ</span>
-<div class="state"><span class="dot"></span><strong>Официальные сообщения не загружаются автоматически</strong></div>
-<p class="muted">На этой версии проекта не отображаются статусы регионов и оперативная обстановка. Для актуальной информации откройте официальные каналы своего региона.</p>
+<div class="state"><span class="dot"></span><strong>Автоматическая проверка источников не подключена</strong></div>
+<p class="muted">На этой версии не отображаются текущие статусы регионов и сообщения очевидцев. Для актуальной информации откройте официальные каналы своего региона.</p>
 </section>
 <section class="card">
 <h2>Как действовать</h2>
@@ -47,14 +52,64 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 </ul>
 </section>
 </div>
-<section class="card" style="margin-top:16px">
+<section class="card">
+<h2>＋ Предложить официальный источник</h2>
+<p class="muted">Можно предложить ссылку на публичное сообщение МЧС или региональной администрации. Сообщения о замеченных объектах, их маршрутах, местах пролёта или работы ПВО сайт не собирает и не публикует.</p>
+<form id="sourceForm">
+<div class="formgrid">
+<div class="field"><label for="city">Город или регион</label><input id="city" name="city" maxlength="80" placeholder="Например, Тула" required></div>
+<div class="field"><label for="sourceUrl">Ссылка на официальный источник</label><input id="sourceUrl" name="sourceUrl" type="url" placeholder="https://..." required></div>
+</div>
+<label class="small"><input type="checkbox" id="officialCheck" required> Подтверждаю, что это ссылка на публичный официальный источник, а не личные наблюдения или слухи.</label>
+<p><button type="submit">Проверить предложение</button></p>
+<div id="formMessage" role="status" aria-live="polite"></div>
+<p class="small">Демонстрационная форма: данные никуда не отправляются и не сохраняются. Публикация предложений не включена.</p>
+</form>
+</section>
+<section class="card">
+<h2>Что будет, если сообщить ложную информацию?</h2>
+<p class="muted">Ниже — краткое справочное описание трёх норм. Их применимость зависит от конкретных обстоятельств; сам факт ошибки не означает автоматически наличие состава правонарушения. Это не юридическая консультация.</p>
+<details class="law">
+<summary>Статья 207.3 УК РФ</summary>
+<p>Касается публичного распространения под видом достоверных сообщений заведомо ложной информации об использовании Вооружённых Сил РФ и некоторых связанных с этим действиях, прямо перечисленных в статье. Это не универсальная статья за любую неточность в сообщении.</p>
+<a href="https://www.consultant.ru/document/cons_doc_LAW_10699/19bf2b8e4b62e143a17a50041a204252d0e263ce/" target="_blank" rel="noopener">Открыть текст статьи 207.3 УК РФ →</a>
+</details>
+<details class="law">
+<summary>Статья 207 УК РФ</summary>
+<p>Устанавливает ответственность за заведомо ложное сообщение о готовящихся взрыве, поджоге или иных действиях, создающих общественно опасные последствия, при условиях, указанных в статье. Обычная ошибка или неподтверждённый слух сами по себе не равны автоматически преступлению по этой статье.</p>
+<a href="https://www.consultant.ru/document/cons_doc_LAW_10699/2c54dfed2e09c1236bf059a9211bb37b2fcbb8e1/" target="_blank" rel="noopener">Открыть текст статьи 207 УК РФ →</a>
+</details>
+<details class="law">
+<summary>Статья 19.13 КоАП РФ</summary>
+<p>Предусматривает административную ответственность за заведомо ложный вызов пожарной охраны, полиции, скорой медицинской помощи или иных специализированных служб. Она относится именно к ложному вызову таких служб, а не автоматически к любой публикации на сайте.</p>
+<a href="https://www.consultant.ru/document/cons_doc_LAW_34661/9429e0b850a88375c483154f5fb709cde1ec4d30/" target="_blank" rel="noopener">Открыть текст статьи 19.13 КоАП РФ →</a>
+</details>
+<p class="small">Тексты законов могут изменяться. Перед выводами проверяйте действующую редакцию на официальном портале правовой информации или обратитесь за консультацией к юристу.</p>
+</section>
+<section class="card">
 <h2>Официальные источники</h2>
 <div class="links">
 <div class="link"><strong>МЧС России</strong><span class="muted">Официальные новости, рекомендации и сообщения ведомства.</span><br><a href="https://mchs.gov.ru/" target="_blank" rel="noopener">Открыть сайт МЧС →</a></div>
-<div class="link"><strong>Единый портал Госуслуг</strong><span class="muted">Государственные сервисы и справочная информация.</span><br><a href="https://www.gosuslugi.ru/" target="_blank" rel="noopener">Открыть Госуслуги →</a></div>
+<div class="link"><strong>Официальный портал правовой информации</strong><span class="muted">Официально опубликованные тексты нормативных актов.</span><br><a href="https://pravo.gov.ru/" target="_blank" rel="noopener">Открыть портал →</a></div>
 </div>
 <p class="muted" style="margin:15px 0 0">Ищите также официальные сайты и проверенные каналы администрации вашего региона.</p>
 </section>
 </main>
-<footer><div class="wrap">РАДАР — независимый справочный проект. Не связан с МЧС России или другими государственными органами. Дата сборки: 8 ноября 2026.</div></footer>
-</body></html>
+<footer><div class="wrap">РАДАР — независимый справочный проект. Не связан с МЧС России или другими государственными органами. Информация о законах дана в ознакомительных целях.</div></footer>
+<script>
+document.getElementById('sourceForm').addEventListener('submit',function(e){
+ e.preventDefault();
+ const city=document.getElementById('city').value.trim();
+ const url=document.getElementById('sourceUrl').value.trim();
+ let parsed;
+ try{parsed=new URL(url)}catch(_){parsed=null}
+ const box=document.getElementById('formMessage');
+ if(!parsed || parsed.protocol!=='https:'){
+  box.style.display='block';box.textContent='Укажи корректную ссылку, начинающуюся с https://';return;
+ }
+ box.style.display='block';
+ box.textContent='Предложение для '+city+' проверено в демо-режиме. Отправка и публикация пока отключены — сайт не сохраняет эти данные.';
+});
+</script>
+</body>
+</html>
