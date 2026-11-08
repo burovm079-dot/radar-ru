@@ -26,7 +26,14 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 #formMessage{margin-top:12px;padding:12px;border-radius:10px;background:#17263a;color:#c8d9ed;display:none}
 footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-size:12px}
 @media(max-width:720px){.grid,.formgrid{grid-template-columns:1fr}.top small{max-width:145px;text-align:right}.card{padding:17px}}
+.map-wrap{height:430px;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:#0b1626;position:relative}
+#russiaMap{height:100%;width:100%;min-height:320px}
+.map-note{display:flex;gap:9px;align-items:flex-start;margin-top:12px;padding:12px;border:1px solid #71552e;background:#2b2419;border-radius:11px;color:#ffe0a7;font-size:13px}
+.map-legend{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;color:var(--muted);font-size:12px}
+.leaflet-container{background:#101c2d;font:inherit}.leaflet-control-attribution{font-size:10px!important}
+@media(max-width:720px){.map-wrap{height:340px}}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 </head>
 <body>
 <header><div class="wrap top"><div class="brand">РА<span><b>Д</b></span>АР</div><small>Информационный проект · неофициальный ресурс</small></div></header>
@@ -35,6 +42,14 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 <h1>Официальные предупреждения<br>и полезные источники</h1>
 <p class="lead">Справочная страница для поиска официальных сообщений и рекомендаций для населения. Проверяйте первоисточник и время публикации.</p>
 <div class="notice"><strong>Важно:</strong> эта страница не является системой экстренного оповещения. Отсутствие сообщения здесь не означает отсутствие опасности. Следуйте официальным инструкциям региональных властей и экстренных служб.</div>
+<section class="card">
+<h2>Карта России</h2>
+<p class="muted">Обзорная карта страны. Сейчас официальные региональные предупреждения к ней не подключены.</p>
+<div class="map-wrap"><div id="russiaMap" role="img" aria-label="Обзорная карта территории России"></div></div>
+<div class="map-legend"><span>● Карта-ориентир</span><span>● Статусы регионов: нет данных</span></div>
+<div class="map-note"><strong>Важно:</strong><span>Карта не показывает наличие или отсутствие угроз. Здесь пока нет проверенного автоматического источника официальных предупреждений. Проверяйте сообщения региональных властей и МЧС.</span></div>
+<p class="small">Подложка карты: OpenStreetMap. © OpenStreetMap contributors.</p>
+</section>
 <div class="grid">
 <section class="card">
 <h2>Текущий статус сайта</h2>
@@ -96,7 +111,17 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 </section>
 </main>
 <footer><div class="wrap">РАДАР — независимый справочный проект. Не связан с МЧС России или другими государственными органами. Информация о законах дана в ознакомительных целях.</div></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
+const mapNode=document.getElementById('russiaMap');
+if(mapNode && window.L){
+ const map=L.map('russiaMap',{scrollWheelZoom:false}).setView([61,100],3);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:8,
+  attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'
+ }).addTo(map);
+ setTimeout(()=>map.invalidateSize(),150);
+}
 document.getElementById('sourceForm').addEventListener('submit',function(e){
  e.preventDefault();
  const city=document.getElementById('city').value.trim();
