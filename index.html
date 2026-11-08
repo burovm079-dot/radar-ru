@@ -67,19 +67,14 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 </ul>
 </section>
 </div>
-<section class="card">
-<h2>＋ Предложить официальный источник</h2>
-<p class="muted">Можно предложить ссылку на публичное сообщение МЧС или региональной администрации. Сообщения о замеченных объектах, их маршрутах, местах пролёта или работы ПВО сайт не собирает и не публикует.</p>
-<form id="sourceForm">
-<div class="formgrid">
-<div class="field"><label for="city">Город или регион</label><input id="city" name="city" maxlength="80" placeholder="Например, Тула" required></div>
-<div class="field"><label for="sourceUrl">Ссылка на официальный источник</label><input id="sourceUrl" name="sourceUrl" type="url" placeholder="https://..." required></div>
-</div>
-<label class="small"><input type="checkbox" id="officialCheck" required> Подтверждаю, что это ссылка на публичный официальный источник, а не личные наблюдения или слухи.</label>
-<p><button type="submit">Проверить предложение</button></p>
-<div id="formMessage" role="status" aria-live="polite"></div>
-<p class="small">Демонстрационная форма: данные никуда не отправляются и не сохраняются. Публикация предложений не включена.</p>
-</form>
+<section class="card" id="regional-status">
+<h2>Официальные предупреждения по регионам</h2>
+<p class="muted">Здесь могут отображаться только общие региональные статусы из проверенного официального источника. Сообщения пользователей не принимаются.</p>
+<div class="state"><span class="dot" id="feedDot"></span><strong id="feedState">Официальный источник данных не подключён</strong></div>
+<p class="small" id="feedUpdated">Последняя проверка: ещё не выполнялась</p>
+<div id="regionList" class="links"><div class="link"><strong>Нет подтверждённых данных</strong><span class="muted">Это не означает, что опасности нет. Проверяйте официальные оповещения своего региона.</span></div></div>
+<p class="small">Обновление проверяется автоматически раз в минуту, когда официальный файл данных будет настроен. Пока источник не подключён, статусы не отображаются и регионы не обозначаются как безопасные.</p>
+</section>
 </section>
 <section class="card">
 <h2>Что будет, если сообщить ложную информацию?</h2>
@@ -113,6 +108,46 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 <footer><div class="wrap">РАДАР — независимый справочный проект. Не связан с МЧС России или другими государственными органами. Информация о законах дана в ознакомительных целях.</div></footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
+async function refreshRegionalStatus(){
+ const state=document.getElementById('feedState');
+ const updated=document.getElementById('feedUpdated');
+ const list=document.getElementById('regionList');
+ const dot=document.getElementById('feedDot');
+ try{
+  const response=await fetch('./data/regions.json?ts='+Date.now(),{cache:'no-store'});
+  if(!response.ok) throw new Error('feed unavailable');
+  const data=await response.json();
+  updated.textContent='Последняя проверка: '+new Date().toLocaleString('ru-RU');
+  const rows=Array.isArray(data.regions)?data.regions:[];
+  const valid=rows.filter(x=>x && typeof x.region==='string' && typeof x.status==='string');
+  if(!valid.length){
+   state.textContent='Официальные статусы пока не опубликованы';
+   dot.style.background='#91a0b3';
+   list.innerHTML='<div class="link"><strong>Нет подтверждённых данных</strong><span class="muted">Отсутствие данных не означает отсутствие опасности.</span></div>';
+   return;
+  }
+  state.textContent='Получены региональные данные';
+  dot.style.background='#f3bd62';
+  list.replaceChildren();
+  valid.forEach(item=>{
+   const card=document.createElement('div');card.className='link';
+   const title=document.createElement('strong');title.textContent=item.region;
+   const status=document.createElement('span');status.className='muted';
+   status.textContent=item.status==='warning'?'Официальное предупреждение опубликовано':item.status==='cancelled'?'Официальная отмена опубликована':'Статус не подтверждён';
+   card.append(title,status);
+   if(item.updated_at){const time=document.createElement('p');time.className='small';time.textContent='Время источника: '+item.updated_at;card.append(time);}
+   if(item.source && /^https:\/\//i.test(item.source)){const a=document.createElement('a');a.href=item.source;a.target='_blank';a.rel='noopener';a.textContent='Первоисточник →';card.append(a);}
+   list.append(card);
+  });
+ }catch(_){
+  state.textContent='Источник данных недоступен или не настроен';
+  dot.style.background='#91a0b3';
+  updated.textContent='Последняя проверка: '+new Date().toLocaleString('ru-RU');
+  list.innerHTML='<div class="link"><strong>Нет подтверждённых данных</strong><span class="muted">Не считайте регион безопасным по этой странице. Откройте официальные каналы властей и МЧС.</span></div>';
+ }
+}
+refreshRegionalStatus();
+setInterval(refreshRegionalStatus,60000);
 const mapNode=document.getElementById('russiaMap');
 if(mapNode && window.L){
  const map=L.map('russiaMap',{scrollWheelZoom:false}).setView([61,100],3);
