@@ -44,18 +44,18 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 <div class="notice"><strong>Важно:</strong> эта страница не является системой экстренного оповещения. Отсутствие сообщения здесь не означает отсутствие опасности. Следуйте официальным инструкциям региональных властей и экстренных служб.</div>
 <section class="card">
 <h2>Карта России</h2>
-<p class="muted">Обзорная карта страны. Сейчас официальные региональные предупреждения к ней не подключены.</p>
+<p class="muted">Обзорная карта для ориентации по регионам. Цвета не обозначают уровень опасности или статус тревоги.</p>
 <div class="map-wrap"><div id="russiaMap" role="img" aria-label="Обзорная карта территории России"></div></div>
 <div class="map-legend"><span>● Карта-ориентир</span><span>● Статусы регионов: нет данных</span></div>
-<div class="map-note"><strong>Важно:</strong><span>Карта не показывает наличие или отсутствие угроз. Здесь пока нет проверенного автоматического источника официальных предупреждений. Проверяйте сообщения региональных властей и МЧС.</span></div>
+<div class="map-note"><strong>Важно:</strong><span>Карта не показывает текущие тревоги, их отмены или отсутствие угроз. Выберите регион и найдите его официальный источник в справочнике ниже.</span></div>
 <p class="small" id="mapLoadNote">Загружаются границы регионов…</p><p class="small">Подложка: OpenStreetMap. Границы регионов: открытые геоданные OpenStreetMap. Контуры приведены для справочной ориентации.</p>
 </section>
 <div class="grid">
 <section class="card">
 <h2>Текущий статус сайта</h2>
 <span class="pill">РЕЖИМ: СПРАВОЧНЫЙ</span>
-<div class="state"><span class="dot"></span><strong>Автоматическая проверка источников не подключена</strong></div>
-<p class="muted">На этой версии не отображаются текущие статусы регионов и сообщения очевидцев. Для актуальной информации откройте официальные каналы своего региона.</p>
+<div class="state"><span class="dot"></span><strong>Каталог официальных источников</strong></div>
+<p class="muted">Сайт не определяет текущую обстановку и не присваивает городам статусы «тревога» или «без тревоги». Откройте официальный источник своего региона.</p>
 </section>
 <section class="card">
 <h2>Как действовать</h2>
@@ -68,12 +68,10 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 </section>
 </div>
 <section class="card" id="regional-status">
-<h2>Официальные предупреждения по регионам</h2>
-<p class="muted">Здесь могут отображаться только общие региональные статусы из проверенного официального источника. Сообщения пользователей не принимаются.</p>
-<div class="state"><span class="dot" id="feedDot"></span><strong id="feedState">Официальный источник данных не подключён</strong></div>
-<p class="small" id="feedUpdated">Последняя проверка: ещё не выполнялась</p>
-<div id="regionList" class="links"><div class="link"><strong>Нет подтверждённых данных</strong><span class="muted">Это не означает, что опасности нет. Проверяйте официальные оповещения своего региона.</span></div></div>
-<p class="small">Обновление проверяется автоматически раз в минуту, когда официальный файл данных будет настроен. Пока источник не подключён, статусы не отображаются и регионы не обозначаются как безопасные.</p>
+<h2>Проверка информации по регионам</h2>
+<p class="muted">Выберите регион на карте, чтобы перейти к его официальному управлению МЧС. На странице не публикуются текущие статусы тревог и их отмен.</p>
+<div class="state"><span class="dot"></span><strong>Официальные источники доступны в справочнике ниже</strong></div>
+<p class="small">Время последней проверки каталога показывает, когда обновлялся список сайтов, а не когда проверялась обстановка в регионе.</p>
 </section>
 </section>
 <section class="card">
@@ -115,44 +113,6 @@ footer{border-top:1px solid var(--line);padding:22px 0 30px;color:#8192a9;font-s
 <footer><div class="wrap">РАДАР — независимый справочный проект. Не связан с МЧС России или другими государственными органами. Информация о законах дана в ознакомительных целях.</div></footer>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
-async function refreshRegionalStatus(){
- const state=document.getElementById('feedState');
- const updated=document.getElementById('feedUpdated');
- const list=document.getElementById('regionList');
- const dot=document.getElementById('feedDot');
- try{
-  const response=await fetch('./data/regions.json?ts='+Date.now(),{cache:'no-store'});
-  if(!response.ok) throw new Error('feed unavailable');
-  const data=await response.json();
-  updated.textContent='Последняя проверка: '+new Date().toLocaleString('ru-RU');
-  const rows=Array.isArray(data.regions)?data.regions:[];
-  const valid=rows.filter(x=>x && typeof x.region==='string' && typeof x.status==='string');
-  if(!valid.length){
-   state.textContent='Официальные статусы пока не опубликованы';
-   dot.style.background='#91a0b3';
-   list.innerHTML='<div class="link"><strong>Нет подтверждённых данных</strong><span class="muted">Отсутствие данных не означает отсутствие опасности.</span></div>';
-   return;
-  }
-  state.textContent='Получены региональные данные';
-  dot.style.background='#f3bd62';
-  list.replaceChildren();
-  valid.forEach(item=>{
-   const card=document.createElement('div');card.className='link';
-   const title=document.createElement('strong');title.textContent=item.region;
-   const status=document.createElement('span');status.className='muted';
-   status.textContent=item.status==='warning'?'Официальное предупреждение опубликовано':item.status==='cancelled'?'Официальная отмена опубликована':'Статус не подтверждён';
-   card.append(title,status);
-   if(item.updated_at){const time=document.createElement('p');time.className='small';time.textContent='Время источника: '+item.updated_at;card.append(time);}
-   if(item.source && /^https:\/\//i.test(item.source)){const a=document.createElement('a');a.href=item.source;a.target='_blank';a.rel='noopener';a.textContent='Первоисточник →';card.append(a);}
-   list.append(card);
-  });
- }catch(_){
-  state.textContent='Источник данных недоступен или не настроен';
-  dot.style.background='#91a0b3';
-  updated.textContent='Последняя проверка: '+new Date().toLocaleString('ru-RU');
-  list.innerHTML='<div class="link"><strong>Нет подтверждённых данных</strong><span class="muted">Не считайте регион безопасным по этой странице. Откройте официальные каналы властей и МЧС.</span></div>';
- }
-}
 async function refreshOfficialSources(){
  const box=document.getElementById('officialSources');
  const state=document.getElementById('sourcesState');
@@ -182,8 +142,6 @@ async function refreshOfficialSources(){
   updated.textContent='Проверьте центральный справочник МЧС по ссылке ниже.';
  }
 }
-refreshRegionalStatus();
-setInterval(refreshRegionalStatus,60000);
 refreshOfficialSources();
 const mapNode=document.getElementById('russiaMap');
 if(mapNode && window.L){
@@ -200,7 +158,7 @@ if(mapNode && window.L){
     onEachFeature:(feature,shape)=>{
      const p=feature.properties||{};
      const name=p.name||p.NAME_1||p.NAME||p.region||p.title||'Регион России';
-     shape.bindPopup('<strong>'+String(name).replace(/[<>&"]/g,'')+'</strong><br>Статус официальных предупреждений здесь пока не подключён.<br>Отсутствие данных не означает безопасность.');
+     shape.bindPopup('<strong>'+String(name).replace(/[<>&"]/g,'')+'</strong><br>Откройте справочник официальных источников ниже, чтобы найти управление МЧС региона.<br>Карта не отображает текущую обстановку.');
     }
    }).addTo(map);
    if(layer.getBounds().isValid())map.fitBounds(layer.getBounds(),{padding:[12,12]});
