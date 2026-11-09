@@ -1,5 +1,157 @@
 {
-  "updated_at": null,
+  "updated_at": "2026-11-09T04:02:12+00:00",
   "directory_source": "https://mchs.gov.ru/ministerstvo/glavnye-upravleniya-po-subektam-rossiyskoy-federacii",
-  "sources": []
+  "status_meaning": "Website reachability only; not an emergency or alert status.",
+  "sources": [
+    {
+      "name": "EN",
+      "url": "https://en.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Белгородской области",
+      "url": "https://31.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Брянской области",
+      "url": "https://32.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Владимирской области",
+      "url": "https://33.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Воронежской области",
+      "url": "https://36.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по г. Москве",
+      "url": "https://moscow.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по г. Севастополю",
+      "url": "https://92.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Донецкой Народной Республике",
+      "url": "https://80.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Запорожской области",
+      "url": "https://85.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Ивановской области",
+      "url": "https://37.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Калужской области",
+      "url": "https://40.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Костромской области",
+      "url": "https://44.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:10+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Курской области",
+      "url": "https://46.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Липецкой области",
+      "url": "https://48.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Луганской Народной Республике",
+      "url": "https://81.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Московской области",
+      "url": "https://50.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Орловской области",
+      "url": "https://57.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Республике Крым",
+      "url": "https://82.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Рязанской области",
+      "url": "https://62.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Смоленской области",
+      "url": "https://67.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Тамбовской области",
+      "url": "https://68.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Тверской области",
+      "url": "https://69.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Тульской области",
+      "url": "https://71.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Херсонской области",
+      "url": "https://84.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:11+00:00"
+    },
+    {
+      "name": "ГУ МЧС России по Ярославской области",
+      "url": "https://76.mchs.gov.ru/",
+      "availability": "available",
+      "checked_at": "2026-11-09T04:02:12+00:00"
+    }
+  ]
 }
